@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <title>LocalStorage</title>
   </head>
 
@@ -11,44 +15,137 @@
       let tasks = JSON.parse(localStorage.getItem("tasks"));
       let divTasks = document.querySelector("#tasks");
 
-      tasks.forEach(function (task) {
-        console.log(task);
-        let dateSpan = document.createElement("span");
-        let dateBr = document.createElement("br");
-        dateSpan.innerHTML = task;
-        divTasks.appendChild(dateSpan);
-        divTasks.appendChild(dateBr);
-      });
+      if (tasks) {
+        tasks.forEach(function (task) {
+          console.log(task);
+          let dateTr = document.createElement("tr");
+
+          let tdTask = document.createElement("td");
+          tdTask.innerHTML = task.task;
+
+          let tdCategory = document.createElement("td");
+          tdCategory.innerHTML = task.category;
+
+          let tdSubcategory = document.createElement("td");
+          tdSubcategory.innerHTML = task.subcategory;
+
+          dateTr.appendChild(tdTask);
+          dateTr.appendChild(tdCategory);
+          dateTr.appendChild(tdSubcategory);
+
+          divTasks.appendChild(dateTr);
+        });
+      }
     }
 
     function handleAddTask() {
       let inputTask = document.querySelector("#inputTask");
+      let inputCategory = document.querySelector("#inputCategory");
+      let inputSubcategory = document.querySelector("#inputSubcategory");
+
       let divTasks = document.querySelector("#tasks");
       let tasks = JSON.parse(localStorage.getItem("tasks"));
-      console.log(tasks.length);
 
-      if (tasks.length === 0) {
-        localStorage.setItem("tasks", JSON.stringify([inputTask.value]));
-      } else {
-        console.log("tewste");
-        tasks.push(inputTask.value);
-        console.log(tasks);
+      if (tasks && tasks.length > 0) {
+        tasks.push({
+          task: inputTask.value,
+          category: inputCategory.value,
+          subcategory: inputSubcategory.value,
+        });
         localStorage.setItem("tasks", JSON.stringify([...tasks]));
+      } else {
+        localStorage.setItem(
+          "tasks",
+          JSON.stringify([
+            {
+              task: inputTask.value,
+              category: inputCategory.value,
+              subcategory: inputSubcategory.value,
+            },
+          ])
+        );
       }
 
-      let dateSpan = document.createElement("span");
-      let dateBr = document.createElement("br");
-      dateSpan.innerHTML = inputTask.value;
-      divTasks.appendChild(dateSpan);
-      divTasks.appendChild(dateBr);
+      let dateTr = document.createElement("tr");
+
+      let tdTask = document.createElement("td");
+      tdTask.innerHTML = inputTask.value;
+
+      let tdCategory = document.createElement("td");
+      tdCategory.innerHTML = inputCategory.value;
+
+      let tdSubcategory = document.createElement("td");
+      tdSubcategory.innerHTML = inputSubcategory.value;
+
+      dateTr.appendChild(tdTask);
+      dateTr.appendChild(tdCategory);
+      dateTr.appendChild(tdSubcategory);
+
+      divTasks.appendChild(dateTr);
     }
   </script>
 
+  <style>
+    * {
+      font-family: "Roboto", sans-serif;
+    }
+    label {
+      font-weight: bold;
+    }
+
+    input {
+      padding: 4px 8px;
+      margin-bottom: 16px;
+    }
+
+    button {
+      padding: 8px 16px;
+      border: 1px solid #eee;
+      margin-bottom: 16px;
+      font-weight: bold;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    table {
+      border: 1px solid #242424;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 16px;
+      border: 1px solid #242424;
+    }
+  </style>
+
   <body onLoad="loadTasks()">
     <label for="inputTask">Tarefa:</label>
+    <br />
     <input type="text" id="inputTask" />
+    <br />
+
+    <label for="inputCategory">Categoria:</label>
+    <br />
+    <input type="text" id="inputCategory" />
+    <br />
+
+    <label for="inputSubcategory">Subcategoria:</label>
+    <br />
+    <input type="text" id="inputSubcategory" />
+    <br />
+
     <button onClick="handleAddTask()">Adicionar</button>
 
-    <div id="tasks"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Tarefa</th>
+          <th>Categoria</th>
+          <th>SubCategoria</th>
+        </tr>
+      </thead>
+      <tbody id="tasks"></tbody>
+    </table>
   </body>
 </html>
