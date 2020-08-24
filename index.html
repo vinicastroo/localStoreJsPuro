@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LocalStorage</title>
+  </head>
+
+  <script>
+    function loadTasks() {
+      let tasks = JSON.parse(localStorage.getItem("tasks"));
+      let divTasks = document.querySelector("#tasks");
+
+      tasks.forEach(function (task) {
+        console.log(task);
+        let dateSpan = document.createElement("span");
+        let dateBr = document.createElement("br");
+        dateSpan.innerHTML = task;
+        divTasks.appendChild(dateSpan);
+        divTasks.appendChild(dateBr);
+      });
+    }
+
+    function handleAddTask() {
+      let inputTask = document.querySelector("#inputTask");
+      let divTasks = document.querySelector("#tasks");
+      let tasks = JSON.parse(localStorage.getItem("tasks"));
+      console.log(tasks.length);
+
+      if (tasks.length === 0) {
+        localStorage.setItem("tasks", JSON.stringify([inputTask.value]));
+      } else {
+        console.log("tewste");
+        tasks.push(inputTask.value);
+        console.log(tasks);
+        localStorage.setItem("tasks", JSON.stringify([...tasks]));
+      }
+
+      let dateSpan = document.createElement("span");
+      let dateBr = document.createElement("br");
+      dateSpan.innerHTML = inputTask.value;
+      divTasks.appendChild(dateSpan);
+      divTasks.appendChild(dateBr);
+    }
+  </script>
+
+  <body onLoad="loadTasks()">
+    <label for="inputTask">Tarefa:</label>
+    <input type="text" id="inputTask" />
+    <button onClick="handleAddTask()">Adicionar</button>
+
+    <div id="tasks"></div>
+  </body>
+</html>
